@@ -27,7 +27,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="relative overflow-hidden">
+          <div className="absolute w-full h-full bottom-0 translate-y-9/12  bg-radial from-white/10 to-50% to-transparent scale-200 pointer-events-none" />
+          {children}
+        </div>
       </body>
     </html>
   );
