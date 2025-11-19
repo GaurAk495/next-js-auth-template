@@ -1,43 +1,66 @@
+import { getSession } from "@/actions/auth";
+import SignOutButton from "@/components/SignOutButton";
+import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-function page() {
+async function page() {
+  const session = await getSession();
+  if (!session) {
+    return redirect("/");
+  }
+
   return (
-    <div className="min-h-screen flex justify-center items-center ">
-      <div className="max-w-7xl px-4 md:px-8">
-        <div className="sm:w-sm p-4 border rounded-xl border-white/10 bg-linear-to-b from-white/5 to-black/5 inset-shadow-2xs inset-shadow-white/5">
-          <h1 className="text-xl font-semibold text-center mb-1">Dashboard</h1>
-          <div className="mb-5 text-center text-balance font-medium text-white/85">
-            Welcome 👋
-          </div>
-
-          <div className="flex flex-row mb-1">
-            <p className="min-w-[150px]">User name:</p>
-            <p> Raneh</p>
-          </div>
-          <div className="flex flex-row mb-1">
-            <p className="min-w-[150px]">User email:</p>
-            <p> Raneh@example.com</p>
-          </div>
-          <div className="flex flex-row mb-4">
-            <p className="min-w-[150px]">Account Created:</p>
-            <p>{new Date().toDateString()}</p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              className="border px-2 py-2 rounded-lg text-center flex-1 font-semibold"
-              href={"/"}
-            >
-              Home
-            </Link>
-            <Link
-              className="border px-2 py-2 rounded-lg text-center flex-1 bg-white text-black font-semibold shadow-xl shadow-white/10 border-white"
-              href={"/register"}
-            >
-              Auth
-            </Link>
-          </div>
+    <div className="max-w-7xl mx-auto min-h-screen flex justify-center items-center px-4 md:px-8 overflow-hidden">
+      <div className="max-w-sm w-full p-4 border rounded-xl border-white/10 bg-linear-to-b from-white/5 to-black/5 inset-shadow-2xs inset-shadow-white/5">
+        <h1 className="text-xl font-semibold text-center mb-1">Dashboard</h1>
+        <div className="mb-2 text-center text-balance font-medium text-white/85">
+          Welcome 👋
         </div>
+        <div className="mx-auto w-20 h-20 rounded-full overflow-hidden mb-5">
+          <Image
+            src={
+              session.user.image ||
+              "https://wallpaperaccess.com/full/297470.jpg"
+            }
+            width={100}
+            height={50}
+            alt={session.user.name}
+            className="object-cover w-full h-full"
+          />
+        </div>
+        <div className="flex flex-row mb-1">
+          <p className="min-w-[150px]">User name:</p>
+          <p> {session.user.name} </p>
+        </div>
+        <div className="flex flex-row mb-1">
+          <p className="min-w-[150px]">User email:</p>
+          <p> {session.user.email}</p>
+        </div>
+        <div className="flex flex-row mb-1">
+          <p className="min-w-[150px]">is email verified</p>
+          <p> {session.user.emailVerified ? "Verified" : "Pending"}</p>
+        </div>
+        <div className="flex flex-row mb-4">
+          <p className="min-w-[150px]">Account Created:</p>
+          <p>{session.user.updatedAt.toDateString()}</p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 mb-2">
+          <Link
+            className="border px-2 py-2 rounded-lg text-center flex-1 font-semibold"
+            href={"/"}
+          >
+            Home
+          </Link>
+          <Link
+            className="border px-2 py-2 rounded-lg text-center flex-1 bg-white text-black font-semibold shadow-xl shadow-white/10 border-white"
+            href={"/register"}
+          >
+            Auth
+          </Link>
+        </div>
+        <SignOutButton />
       </div>
     </div>
   );
