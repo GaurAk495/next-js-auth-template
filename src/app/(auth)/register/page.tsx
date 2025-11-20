@@ -1,6 +1,7 @@
 "use client";
-import { signUp } from "@/lib/auth-client";
-import { Check, Cross, Loader2Icon, Plus } from "lucide-react";
+import { signIn, signUp } from "@/lib/auth-client";
+import { Loader2Icon, Plus } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -29,6 +30,7 @@ function page() {
         name,
         email,
         password,
+        callbackURL: "/dashboard",
       });
 
       if (res.error) {
@@ -39,6 +41,27 @@ function page() {
     } catch (error) {
       setErrors([
         error instanceof Error ? error.message : "Something went wrong.",
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleOnOAuth(provider: "google" | "github") {
+    try {
+      setLoading(true);
+      const res = await signIn.social({
+        provider,
+        callbackURL: "/dashboard",
+      });
+      if (res.error?.message) {
+        setErrors([res.error.message]);
+      }
+    } catch (error) {
+      setErrors([
+        error instanceof Error
+          ? error.message
+          : `Failed to signIn using ${provider}`,
       ]);
     } finally {
       setLoading(false);
@@ -66,6 +89,25 @@ function page() {
           </div>
         )}
 
+        <div className="flex items-center flex-col sm:flex-row sm:items-stretch gap-2 mb-2">
+          <button
+            className="w-full border py-2 text-sm text-center rounded-lg bg-white text-black/90 flex flex-row gap-2 justify-center cursor-pointer"
+            onClick={() => handleOnOAuth("google")}
+            disabled={loading}
+          >
+            <Image src="google.svg" alt="google-logo" width={16} height={16} />
+            Sign up with Google
+          </button>
+          <button
+            className="w-full border py-2 text-sm text-center rounded-lg bg-white text-black/90  flex flex-row gap-2 justify-center cursor-pointer"
+            onClick={() => handleOnOAuth("github")}
+            disabled={loading}
+          >
+            <Image src="github.svg" alt="google-logo" width={16} height={16} />
+            Sign up with Github
+          </button>
+        </div>
+
         <div className="mb-3">
           <label htmlFor="fullName" className="text-sm block mb-1">
             Full name
@@ -75,7 +117,7 @@ function page() {
             name="name"
             id="fullName"
             autoComplete="name"
-            className="w-full border border-white/15 rounded-lg p-2"
+            className="w-full border bg-white/2 border-white/15 rounded-lg p-2"
           />
         </div>
 
@@ -88,7 +130,7 @@ function page() {
             name="email"
             id="email"
             autoComplete="email"
-            className="w-full border border-white/15 rounded-lg p-2"
+            className="w-full border bg-white/2 border-white/15 rounded-lg p-2"
           />
         </div>
 
@@ -101,7 +143,7 @@ function page() {
             name="password"
             autoComplete="new-password"
             id="password"
-            className="w-full border border-white/15 rounded-lg p-2"
+            className="w-full border bg-white/2 border-white/15 rounded-lg p-2"
           />
         </div>
         <button

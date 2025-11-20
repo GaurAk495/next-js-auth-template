@@ -26,7 +26,7 @@ export default function SignOutButton() {
   return (
     <button
       onClick={handleOnSignOut}
-      className="flex justify-center items-start px-2 py-2 border border-red-500 rounded-lg w-full bg-red-600/25 text-red-500 font-semibold cursor-pointer"
+      className="flex justify-center items-center gap-2 px-2 py-2 border border-red-500 rounded-lg w-full bg-red-600/25 text-red-500 font-semibold cursor-pointer"
     >
       Sign Out
       {loading && <Loader2Icon className="animate-spin" size={17} />}

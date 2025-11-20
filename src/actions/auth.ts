@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export const getSession = async () => {
-  console.log("funciton is called");
   return await auth.api.getSession({
     headers: await headers(),
   });

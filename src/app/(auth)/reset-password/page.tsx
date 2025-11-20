@@ -1,35 +1,41 @@
 "use client";
-import { requestPasswordReset } from "@/lib/auth-client";
-import { Check, Loader2Icon, Plus } from "lucide-react";
+
+import { resetPassword } from "@/lib/auth-client";
+import { Loader2Icon, Plus } from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 function page() {
-  const [isMailSent, setIsMailSent] = useState(false);
   const [errors, setErrors] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors(null);
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
+    const newPassword = formData.get("newpassword") as string;
+    const cnfmPassword = formData.get("cnfmpassword") as string;
 
     try {
-      if (!email) {
-        throw new Error("email cannot be empty");
+      if (!token) {
+        throw new Error("Invalid Token!");
       }
-      const res = await requestPasswordReset({
-        email,
-        redirectTo: `${
-          process.env.NEXT_PUBLIC_APP_HOST_URL! as string
-        }/reset-password`,
-      });
+      if (newPassword !== cnfmPassword) {
+        throw new Error("Password should match with confirm password.");
+      }
+      console.log(newPassword, token);
+
+      const res = await resetPassword({ newPassword, token });
+
       if (res.error) {
         setErrors([res.error.message || "Something went wrong."]);
       } else {
-        setIsMailSent(true);
+        router.replace("/login");
       }
     } catch (error) {
       setErrors([
@@ -48,11 +54,12 @@ function page() {
           className="sm:w-sm p-4 border rounded-xl border-white/10 bg-linear-to-b from-white/5 to-black/5 inset-shadow-2xs inset-shadow-white/5"
         >
           <h1 className="text-xl font-semibold text-center mb-1">
-            Forgot password
+            Reset Password
           </h1>
-          <div className="mb-5 text-center text-balance font-medium text-white/85">
-            Enter your email to get reset password link.
+          <div className="mb-5 max-w-[220px] mx-auto text-sm text-center font-medium text-white/80">
+            Enter your New Password to get reset password link.
           </div>
+
           {errors && (
             <div className="text-[12px] bg-red-600/10 p-4 mb-4 rounded-xl border border-red-500/55">
               {errors.map((error, i) => (
@@ -63,34 +70,37 @@ function page() {
             </div>
           )}
 
-          {isMailSent && (
-            <div className="text-[12px] bg-green-600/10 p-4 mb-4 rounded-xl border border-green-500/55">
-              <div className="flex flex-row items-center gap-2">
-                <Check className=" text-green-400/50" />
-                <p className="text-green-400/70 font-semibold">
-                  If this email exists in our system, You may receive password
-                  reset link.
-                </p>
-              </div>
-            </div>
-          )}
           <div className="mb-3">
-            <label htmlFor="email" className="text-sm block mb-1">
-              Email
+            <label htmlFor="newpassword" className="text-sm block mb-1">
+              New Password
             </label>
             <input
-              type="email"
-              name="email"
-              id="email"
+              type="password"
+              name="newpassword"
+              autoComplete="new-password"
+              id="newpassword"
               className="w-full border border-white/15 rounded-lg p-1.5"
             />
           </div>
+          <div className="mb-3">
+            <label htmlFor="cnfmpassword" className="text-sm block mb-1">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="cnfmpassword"
+              autoComplete="new-password webauthn"
+              id="cnfmpassword"
+              className="w-full border border-white/15 rounded-lg p-1.5"
+            />
+          </div>
+
           <button
             type="submit"
             disabled={loading}
             className="flex flex-row justify-center items-center gap-2 mb-2 w-full border px-2 py-2 rounded-lg text-center flex-1 bg-white/90 hover:bg-white disabled:bg-white/70 duration-200 cursor-pointer text-black font-semibold shadow-xl shadow-white/10 border-white "
           >
-            Send OTP
+            Submit
             {loading && <Loader2Icon className="animate-spin" size={17} />}
           </button>
           <div className="w-full text-center">

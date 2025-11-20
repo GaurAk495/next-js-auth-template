@@ -1,6 +1,7 @@
 "use client";
 import { signIn } from "@/lib/auth-client";
 import { Loader2Icon, Plus } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -27,6 +28,7 @@ function page() {
       const res = await signIn.email({
         email,
         password,
+        callbackURL: "/dashboard",
       });
 
       if (res.error) {
@@ -37,6 +39,27 @@ function page() {
     } catch (error) {
       setErrors([
         error instanceof Error ? error.message : "Something went wrong.",
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleOnOAuth(provider: "google" | "github") {
+    try {
+      setLoading(true);
+      const res = await signIn.social({
+        provider,
+        callbackURL: "/dashboard",
+      });
+      if (res.error?.message) {
+        setErrors([res.error.message]);
+      }
+    } catch (error) {
+      setErrors([
+        error instanceof Error
+          ? error.message
+          : `Failed to signIn using ${provider}`,
       ]);
     } finally {
       setLoading(false);
@@ -63,6 +86,25 @@ function page() {
             ))}
           </div>
         )}
+
+        <div className="flex items-center flex-col sm:flex-row sm:items-stretch gap-2 mb-2">
+          <button
+            className="w-full border py-2 text-sm text-center rounded-lg bg-white text-black/90 flex flex-row gap-2 justify-center cursor-pointer"
+            onClick={() => handleOnOAuth("google")}
+            disabled={loading}
+          >
+            <Image src="google.svg" alt="google-logo" width={16} height={16} />
+            Sign in with Google
+          </button>
+          <button
+            className="w-full border py-2 text-sm text-center rounded-lg bg-white text-black/90  flex flex-row gap-2 justify-center cursor-pointer"
+            onClick={() => handleOnOAuth("github")}
+            disabled={loading}
+          >
+            <Image src="github.svg" alt="google-logo" width={16} height={16} />
+            Sign in with Github
+          </button>
+        </div>
 
         <div className="mb-3">
           <label htmlFor="email" className="text-sm block mb-1">

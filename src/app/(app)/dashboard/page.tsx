@@ -1,4 +1,5 @@
 import { getSession } from "@/actions/auth";
+import SentVerificationMail from "@/components/SentVerificationEmail";
 import SignOutButton from "@/components/SignOutButton";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,6 +7,7 @@ import { redirect } from "next/navigation";
 
 async function page() {
   const session = await getSession();
+
   if (!session) {
     return redirect("/");
   }
@@ -39,7 +41,14 @@ async function page() {
         </div>
         <div className="flex flex-row mb-1">
           <p className="min-w-[150px]">is email verified</p>
-          <p> {session.user.emailVerified ? "Verified" : "Pending"}</p>
+          {session.user.emailVerified ? (
+            <p>Verified</p>
+          ) : (
+            <div className="w-full flex flex-row justify-between items-end">
+              <div>Pending</div>
+              <SentVerificationMail email={session.user.email} />
+            </div>
+          )}
         </div>
         <div className="flex flex-row mb-4">
           <p className="min-w-[150px]">Account Created:</p>
