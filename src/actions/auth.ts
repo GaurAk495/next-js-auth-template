@@ -6,9 +6,3 @@ export const getSession = async () => {
     headers: await headers(),
   });
 };
-
-export const signOut = async () => {
-  return await auth.api.signOut({
-    headers: await headers(),
-  });
-};

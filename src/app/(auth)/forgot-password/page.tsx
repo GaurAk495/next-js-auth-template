@@ -23,7 +23,8 @@ function page() {
       const res = await requestPasswordReset({
         email,
         redirectTo: `${
-          process.env.NEXT_PUBLIC_APP_HOST_URL! as string
+          (process.env.NEXT_PUBLIC_APP_HOST_URL! as string) ||
+          `https://${process.env.VERCEL_URL! as string}`
         }/reset-password`,
       });
       if (res.error) {
