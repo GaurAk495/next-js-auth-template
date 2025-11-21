@@ -13,8 +13,8 @@ async function page() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto min-h-screen flex justify-center items-center px-4 md:px-8 overflow-hidden">
-      <div className="max-w-sm w-full p-4 border rounded-xl border-white/10 bg-linear-to-b from-white/5 to-black/5 inset-shadow-2xs inset-shadow-white/5">
+    <div className="max-w-7xl mx-auto flex justify-center items-center px-4 md:px-8 overflow-hidden py-20">
+      <div className="max-w-lg w-full p-4 border rounded-xl border-white/10 bg-linear-to-b from-white/5 to-black/5 inset-shadow-2xs inset-shadow-white/5">
         <h1 className="text-xl font-semibold text-center mb-1">Dashboard</h1>
         <div className="mb-2 text-center text-balance font-medium text-white/85">
           Welcome 👋
@@ -31,13 +31,16 @@ async function page() {
             className="object-cover w-full h-full"
           />
         </div>
-        <div className="flex flex-row mb-1">
+        <div className="flex flex-row  mb-1">
           <p className="min-w-[150px]">User name:</p>
-          <p> {session.user.name} </p>
+          <p className="overflow-hidden text-ellipsis ">
+            {" "}
+            {session.user.name}{" "}
+          </p>
         </div>
         <div className="flex flex-row mb-1">
-          <p className="min-w-[150px]">User email:</p>
-          <p> {session.user.email}</p>
+          <p className="min-w-[150px] ">User email:</p>
+          <p className="overflow-hidden text-ellipsis">{session.user.email}</p>
         </div>
         <div className="flex flex-row mb-1">
           <p className="min-w-[150px]">is email verified</p>
