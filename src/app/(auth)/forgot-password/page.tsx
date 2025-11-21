@@ -22,10 +22,7 @@ function page() {
       }
       const res = await requestPasswordReset({
         email,
-        redirectTo: `${
-          (process.env.NEXT_PUBLIC_APP_HOST_URL! as string) ||
-          `https://${process.env.VERCEL_URL! as string}`
-        }/reset-password`,
+        redirectTo: `/reset-password`,
       });
       if (res.error) {
         setErrors([res.error.message || "Something went wrong."]);

@@ -44,6 +44,5 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
   },
-  trustedOrigins: ["http://localhost:3000"],
   plugins: [nextCookies()],
 });
