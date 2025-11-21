@@ -3,8 +3,6 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prismaclient";
 import { nextCookies } from "better-auth/next-js";
 import { sendEmail } from "./sendEmail";
-import { NextResponse } from "next/server";
-import { redirect } from "next/navigation";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -43,6 +41,19 @@ export const auth = betterAuth({
     },
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
+  },
+  trustedOrigins(request) {
+    const host = request.headers.get("host");
+
+    const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+
+    const origins: string[] = ["http://localhost:3000"];
+
+    if (host) {
+      origins.push(`${protocol}://${host}`);
+    }
+
+    return origins;
   },
   plugins: [nextCookies()],
 });
