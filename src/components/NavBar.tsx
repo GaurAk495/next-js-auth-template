@@ -13,7 +13,7 @@ function NavBar() {
         <div className="ml-auto flex items-center gap-2">
           {!isPending && data?.session.id ? (
             <>
-              <div>AKhil</div>
+              <div>{data.user.name}</div>
               <Link
                 href="/dashboard"
                 className="p-1.5 border border-white bg-white text-black font-medium rounded-lg px-3 "
