@@ -11,8 +11,6 @@
     "migrate:prod": "prisma migrate deploy"
   },
   "dependencies": {
-    "@apollo/client": "^4.0.9",
-    "@apollo/client-integration-nextjs": "^0.14.1",
     "@prisma/client": "^6.19.0",
     "better-auth": "^1.3.34",
     "dotenv": "^17.2.3",

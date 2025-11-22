@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Auth Template
 
-## Getting Started
+A comprehensive, production-ready authentication template built with **Next.js 16**, **Better Auth**, **Prisma**, and **PostgreSQL**. This project provides a solid foundation for building secure web applications with built-in email and social authentication.
 
-First, run the development server:
+## 🚀 Features
+
+- **Authentication**: Complete auth system using [Better Auth](https://better-auth.com/).
+  - Email & Password (Login, Register).
+  - Social Login (Google, GitHub).
+  - Email Verification.
+  - Password Reset & Forgot Password flows.
+  - Secure Session Management.
+- **Database**: **PostgreSQL** managed via **Prisma ORM**.
+- **Styling**: Modern UI with **Tailwind CSS v4**.
+- **Email**: Transactional emails (Verification, Password Reset) using **Nodemailer** (configured for ZeptoMail).
+- **Type Safety**: Full TypeScript support.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Auth**: [Better Auth](https://better-auth.com/)
+- **Database**: [PostgreSQL](https://www.postgresql.org/)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+
+- **Email**: [Nodemailer](https://nodemailer.com/)
+
+## 📂 Project Structure
+
+```
+├── src/
+│   ├── app/              # Next.js App Router pages
+│   │   ├── (auth)/       # Auth routes (login, register, etc.)
+│   │   ├── (app)/        # Protected app routes
+│   │   └── api/          # API routes
+│   ├── components/       # Reusable UI components
+│   ├── lib/              # Utilities and configurations (Auth, Prisma, Email)
+│   └── actions/          # Server actions
+├── prisma/               # Prisma schema and migrations
+├── public/               # Static assets
+└── ...
+```
+
+## ⚡ Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd next-js-auth-template
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+pnpm install
+# or
+yarn install
+```
+
+### 3. Environment Variables
+
+Create a `.env` file in the root directory and add the following variables:
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/mydb?schema=public"
+
+# Better Auth
+BETTER_AUTH_SECRET="your-super-secret-key"
+BETTER_AUTH_URL="http://localhost:3000" # or your production URL
+
+# Social Auth Providers
+NEXT_GOOGLE_CLIENT_ID="your-google-client-id"
+NEXT_GOOGLE_CLIENT_SECRET="your-google-client-secret"
+NEXT_GITHUB_CLIENT_ID="your-github-client-id"
+NEXT_GITHUB_CLIENT_SECRET="your-github-client-secret"
+
+# Email (ZeptoMail/Nodemailer)
+NEXT_ZEPTO_HOST="smtp.zeptomail.com"
+NEXT_ZEPTO_PORT="587"
+NEXT_ZEPTO_USER="your-zepto-user"
+NEXT_ZEPTO_PASS="your-zepto-password"
+NEXT_FROM_EMAIL="noreply@yourdomain.com"
+```
+
+### 4. Database Setup
+
+Generate the Prisma client and push the schema to your database:
+
+```bash
+# Generate Prisma Client
+npx prisma generate
+
+# Run migrations (development)
+npx prisma migrate dev --name init
+```
+
+### 5. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📜 Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev`: Starts the development server.
+- `npm run build`: Builds the application for production.
+- `npm run start`: Starts the production server.
+- `npm run lint`: Runs ESLint.
+- `npm run postinstall`: Generates Prisma client (runs automatically after install).
+- `npm run migrate:prod`: Deploys Prisma migrations for production.
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.

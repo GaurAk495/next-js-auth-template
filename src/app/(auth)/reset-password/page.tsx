@@ -4,7 +4,7 @@ import { resetPassword } from "@/lib/auth-client";
 import { Loader2Icon, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function page() {
   const [errors, setErrors] = useState<string[] | null>(null);
@@ -44,6 +44,16 @@ function page() {
     } finally {
       setLoading(false);
     }
+  }
+
+  useEffect(() => {
+    if (!token) {
+      router.replace("/");
+    }
+  }, []);
+
+  if (!token) {
+    return;
   }
 
   return (
