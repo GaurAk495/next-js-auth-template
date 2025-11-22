@@ -13,7 +13,7 @@ async function page() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto flex justify-center items-center px-4 md:px-8 overflow-hidden py-20">
+    <div className="max-w-7xl min-h-screen mx-auto flex justify-center items-center px-4 md:px-8 overflow-hidden py-20">
       <div className="max-w-lg w-full p-4 border rounded-xl border-white/10 bg-linear-to-b from-white/5 to-black/5 inset-shadow-2xs inset-shadow-white/5">
         <h1 className="text-xl font-semibold text-center mb-1">Dashboard</h1>
         <div className="mb-2 text-center text-balance font-medium text-white/85">
